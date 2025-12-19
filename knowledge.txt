@@ -1,0 +1,11 @@
+Artificial Intelligence is the broad field of building intelligent systems.
+
+Machine Learning is a subset of AI that learns from data.
+
+Deep Learning uses neural networks with multiple layers.
+
+LSTM and GRU are types of recurrent neural networks used for sequence data.
+
+Transformers use attention mechanisms and power modern LLMs.
+
+RAG stands for Retrieval Augmented Generation.
