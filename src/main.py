@@ -21,12 +21,3 @@ if __name__ == "__main__":
 
         print("\nAnswer:")
         print(answer)
-
-
-# Clean your repo structure properly
-
-# Make it interview-grade
-
-# Add a professional README.md explaining your RAG system
-
-# Decide whether FAISS / Chroma vectors should be persisted or ignored
