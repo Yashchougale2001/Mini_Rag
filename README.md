@@ -1,78 +1,155 @@
-# Mini-RAG: CPU-Friendly Retrieval-Augmented Generation System
+Mini-RAG: CPU-Friendly Retrieval-Augmented Generation System
 
-A lightweight, modular **Retrieval-Augmented Generation (RAG)** system built for **CPU-only environments**.  
-It uses **ChromaDB** for vector storage, **MiniLM embeddings** for semantic search, and a **local FLAN-T5 model** for answer generation.  
+A lightweight, modular Retrieval-Augmented Generation (RAG) system designed specifically for CPU-only environments and low-resource machines.
 
-This project demonstrates a **full RAG pipeline** with **modular, maintainable code**, suitable for small to medium text knowledge bases.
+This project demonstrates how to build a complete, local RAG pipeline using:
 
----
+ChromaDB for persistent vector storage
 
-## 🚀 Features
+MiniLM embeddings for semantic retrieval
 
-- **Semantic retrieval** using `all-MiniLM-L6-v2` embeddings
-- **ChromaDB vector database** for scalable, persistent storage
-- **CPU-friendly LLM generation** with `google/flan-t5-small`
-- **Proper chunking with overlap** for improved retrieval quality
-- Modular structure: easy to maintain, extend, or swap components
-- CLI-based interactive Q&A loop
+FLAN-T5 (small) for grounded answer generation
 
----
+The system answers questions strictly from a local knowledge base, avoiding hallucinations.
 
-## 🗂 Project Structure
+🎯 Why This Project Exists
 
+Most RAG tutorials assume:
+
+Paid APIs
+
+High-end GPUs
+
+Cloud infrastructure
+
+This project proves that:
+
+You can build a real RAG system locally, for free, on a CPU with limited RAM, while still following clean architecture and production-style design.
+
+🚀 Features
+
+Semantic retrieval using all-MiniLM-L6-v2
+
+Persistent ChromaDB vector store (no re-embedding on restart)
+
+CPU-friendly text generation using google/flan-t5-small
+
+Overlapping text chunking for better retrieval quality
+
+Strict context-grounded answering (no hallucinations)
+
+Clean, modular, interview-ready codebase
+
+Interactive CLI-based Q&A loop
+
+🗂 Project Structure
 mini_rag/
 │
 ├── data/
-│ └── knowledge.txt # Knowledge base (text)
+│   └── knowledge.txt          # Text knowledge base
 │
 ├── src/
-│ ├── init.py
-│ ├── loader.py # Loading + chunking text
-│ ├── vector_store.py # ChromaDB init, add, query
-│ ├── retrieval.py # Retrieval logic (optional thresholds)
-│ ├── generator.py # LLM prompt + answer generation
-│ └── main.py # Main interactive CLI
+│   ├── loader/
+│   │   └── loader.py          # Text loading & chunking
+│   │
+│   ├── db/
+│   │   └── vector_store.py    # ChromaDB setup, add, query
+│   │
+│   ├── retrieval/
+│   │   └── retriever.py       # Retrieval logic
+│   │
+│   ├── generation/
+│   │   └── generator.py       # Prompting & answer generation
+│   │
+│   └── main.py                # CLI entry point
 │
+├── chroma_db/                 # Persistent vector store (gitignored)
 ├── requirements.txt
 └── README.md
 
-Answers questions strictly from a local text file.
+🔄 RAG Workflow (High-Level)
 
-1. Load text
-2. Split into chunks
-3. Embed chunks
-4. Store embeddings
-5. Accept user query
-6. Embed query
-7. Retrieve relevant chunks
-8. Ask LLM using retrieved text
+Load text from knowledge.txt
 
-Workflow
+Split text into overlapping chunks
 
+Generate embeddings using MiniLM
+
+Store embeddings in ChromaDB
+
+Accept user query
+
+Embed query
+
+Retrieve top-K relevant chunks
+
+Generate answer using retrieved context only
+
+🧠 Architecture Overview
 knowledge.txt
       ↓
 Text Loader
       ↓
-Text Chunking
+Chunking (with overlap)
       ↓
 Embedding Model (MiniLM)
       ↓
-Vector Store (in-memory)
+Vector Store (ChromaDB – persistent)
       ↓
 User Query
       ↓
 Query Embedding
       ↓
-Similarity Search (cosine)
+Similarity Search
       ↓
 Top-K Relevant Chunks
       ↓
-Displayed Answer (retrieved text)
+LLM (FLAN-T5)
+      ↓
+Final Answer
 
+🧩 Modular Design (File-Level Responsibility)
+Module	Responsibility
+loader	Load raw text and split into chunks
+vector_store	Manage vector DB creation, insertion, retrieval
+retriever	Query orchestration & retrieval logic
+generator	Context-grounded answer generation
+main	Application entry point & CLI loop
 
-## Architecture Overview
+Each component has a single responsibility, making the system easy to extend or replace.
 
-### File-Level Workflow
-This project follows a modular RAG architecture where each component has a single responsibility.
+⚙️ Tech Stack
+Component	Technology
+Embeddings	SentenceTransformers (MiniLM)
+Vector DB	ChromaDB
+LLM	google/flan-t5-small
+Language	Python
+Hardware	CPU-only
+🧪 Limitations
 
-![RAG File Workflow](docs/rag_file_level_workflow.png)
+Designed for small to medium text corpora
+
+FLAN-T5-small has limited reasoning depth
+
+No conversation memory (single-turn Q&A)
+
+No re-ranking or hybrid search (yet)
+
+🔮 Future Improvements
+
+Conversation memory
+
+Similarity thresholding
+
+Re-ranking (cross-encoder)
+
+Hybrid retrieval (BM25 + embeddings)
+
+Evaluation metrics for retrieval quality
+
+Web UI / API layer
+
+📌 Key Takeaway
+
+This project demonstrates that RAG is an architecture, not a paid API feature.
+It focuses on clarity, correctness, and constraints, making it ideal for learning, interviews, and small-scale applications.
